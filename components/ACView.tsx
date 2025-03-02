@@ -3,11 +3,12 @@ import {primaryColors} from "@/constants/colors";
 
 interface ACViewProps {
     children: React.ReactNode;
+    style?: any;
 }
 
 const ACView = (props: ACViewProps) => {
   return (
-      <View style={styles.background}>
+      <View style={[styles.background, props.style]}>
           {props.children}
       </View>
   );

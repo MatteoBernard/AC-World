@@ -70,7 +70,7 @@ export const uiColors = {
 
     // Cards
     card: {
-        background: '#ffffff',
+        background: '#fbf6e3',
         border: '#e8d8a3',
     }
 }
