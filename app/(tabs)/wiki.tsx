@@ -1,12 +1,12 @@
 import ACText from "@/components/ACText";
 import ACView from "@/components/ACView";
 
-const Home = () => {
+const Wiki = () => {
     return (
         <ACView>
-            <ACText>Home</ACText>
+            <ACText>Wiki</ACText>
         </ACView>
-    );
+    )
 }
 
-export default Home;
+export default Wiki;

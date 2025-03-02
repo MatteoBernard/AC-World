@@ -1,45 +1,121 @@
-import { Tabs } from 'expo-router';
+import {Link, Tabs} from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
+import { Image, Text, View } from 'react-native';
+import { uiColors } from '@/constants/colors';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+const titles: Record<string, string> = {
+    wiki: 'Wiki',
+    favorites: 'Favoris',
+    index: 'Accueil',
+    acdle: 'ACDle',
+    memo: 'Memo',
+};
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+const TabLayout = () => {
+    return (
+        <Tabs
+            screenOptions={({ route }) => ({
+                headerShown: true,
+                headerStyle: {
+                    backgroundColor: uiColors.header.background,
+                    borderBottomWidth: 5,
+                    borderBottomColor: uiColors.header.border,
+                },
+                headerTitle: () => {
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
+                    return (
+                        <View style={headerTitleContainerStyle}>
+                            <Text style={headerTitleStyle}>{titles[route.name] || 'App'}</Text>
+                            <Link href="/">
+                                <Image source={require('@/assets/images/icons/leaf.png')} style={headerIconStyle} />
+                            </Link>
+                        </View>
+                    );
+                },
+                tabBarActiveTintColor: uiColors.navBar.activeIcon,
+                tabBarStyle: {
+                    height: "10%",
+                    bottom: 0,
+                    backgroundColor: uiColors.navBar.background,
+                    borderTopWidth: 5,
+                    borderColor: uiColors.navBar.border,
+                },
+                animation: "none",
+            })}
+        >
+        <Tabs.Screen
+                name="wiki"
+                options={{
+                    title: 'Wiki',
+                    tabBarIcon: () => <Image source={require('@/assets/images/icons/owl.png')} style={tabIconStyle} />,
+                    tabBarLabelStyle: tabLabelStyle,
+                }}
+            />
+            <Tabs.Screen
+                name="favorites"
+                options={{
+                    title: 'Favoris',
+                    tabBarIcon: () => <Image source={require('@/assets/images/icons/star.png')} style={tabIconStyle} />,
+                    tabBarLabelStyle: tabLabelStyle,
+                }}
+            />
+            <Tabs.Screen
+                name="index"
+                options={{
+                    title: 'Accueil',
+                    tabBarIcon: () => <Image source={require('@/assets/images/icons/leaf.png')} style={tabIconStyle} />,
+                    tabBarLabelStyle: tabLabelStyle,
+                }}
+            />
+            <Tabs.Screen
+                name="acdle"
+                options={{
+                    title: 'ACDle',
+                    tabBarIcon: () => <Image source={require('@/assets/images/icons/feather.png')} style={tabIconStyle} />,
+                    tabBarLabelStyle: tabLabelStyle,
+                }}
+            />
+            <Tabs.Screen
+                name="memo"
+                options={{
+                    title: 'Memo',
+                    tabBarIcon: () => <Image source={require('@/assets/images/icons/ticket.png')} style={tabIconStyle} />,
+                    tabBarLabelStyle: tabLabelStyle,
+                }}
+            />
+        </Tabs>
+    );
 }
+
+const tabIconStyle = {
+    width: 50,
+    height: 50,
+    marginTop: 16,
+}
+
+const tabLabelStyle = {
+    fontFamily: 'FinkHeavy',
+    fontSize: 14,
+    marginTop: 16,
+}
+
+const headerTitleContainerStyle = {
+    flexDirection: 'row' as 'row',
+    justifyContent: 'space-between' as 'space-between',
+    alignItems: 'center' as 'center',
+    width: '100%' as '100%',
+    paddingHorizontal: 16,
+}
+
+const headerTitleStyle = {
+    fontFamily: 'FinkHeavy',
+    fontSize: 30,
+    color: uiColors.header.text,
+}
+
+const headerIconStyle = {
+    width: 50,
+    height: 50,
+}
+
+export default TabLayout;
