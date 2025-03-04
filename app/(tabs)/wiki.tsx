@@ -1,23 +1,23 @@
 import ACView from "@/components/ACView";
-import {getVillagers} from "@/utils/db_util";
-import {useEffect, useState} from "react";
+import { getVillagers } from "@/utils/db_util";
+import { useEffect, useState } from "react";
 import Villager from "@/types/Villager";
 import VillagerCard from "@/components/VillagerCard";
-import {FlatList, Modal, StyleSheet, TouchableOpacity, View} from "react-native";
-import ACText from "@/components/ACText";
+import { FlatList, Modal, StyleSheet, TouchableOpacity } from "react-native";
 import ACModalView from "@/components/ACModalView";
-import {uiColors} from "@/constants/colors";
+import { uiColors } from "@/constants/colors";
+import FilterComponent from "@/components/FilterComponent";
 
 const Wiki = () => {
-
     const [villagers, setVillagers] = useState<Villager[]>([]);
+    const [filteredVillagers, setFilteredVillagers] = useState<Villager[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedVillager, setSelectedVillager] = useState<Villager | null>(null);
 
-
     useEffect(() => {
         getVillagers().then((villagers) => {
-            setVillagers(villagers.slice(0, 30));
+            setVillagers(villagers);
+            setFilteredVillagers(villagers);
         });
     }, []);
 
@@ -26,10 +26,27 @@ const Wiki = () => {
         setModalVisible(true);
     };
 
+    const handleFilterChange = (species: string[], query: string) => {
+        let filtered = villagers;
+
+        if (species.length > 0) {
+            filtered = filtered.filter(villager =>
+                species.some(speciesValue => speciesValue.includes(villager.espece))
+            );
+        }
+
+        if (query) {
+            filtered = filtered.filter(villager => villager.nom.toLowerCase().includes(query.toLowerCase()));
+        }
+
+        setFilteredVillagers(filtered);
+    };
+
     return (
         <ACView>
+            <FilterComponent onFilterChange={handleFilterChange} />
             <FlatList
-                data={villagers}
+                data={filteredVillagers}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => handleCardPress(item)}>
                         <VillagerCard villager={item} widthPercent={"20%"} />
@@ -37,7 +54,6 @@ const Wiki = () => {
                 )}
                 keyExtractor={(item) => item.id.toString()}
                 numColumns={4}
-
             />
             {selectedVillager && (
                 <Modal
@@ -52,8 +68,8 @@ const Wiki = () => {
                 </Modal>
             )}
         </ACView>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     modalView: {
