@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Dimensions, Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import {textColors, uiColors} from "@/constants/colors";
+import { textColors, uiColors } from "@/constants/colors";
 
 export type CardType = {
     id: number;
@@ -15,7 +15,7 @@ const MemoCard: React.FC<{ card: CardType, onClick: () => void, flipped: boolean
         <TouchableOpacity
             style={styles.card}
             onPress={onClick}
-            disabled={!imageLoaded}
+            disabled={!imageLoaded || card.matched}
         >
             <View style={styles.cardContainer}>
                 <Image
