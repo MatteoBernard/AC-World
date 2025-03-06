@@ -152,7 +152,7 @@ const ACDle = () => {
                 <View style={styles.gameOverContainer}>
                     <ACText style={styles.finishLabel}>Bien joué ! Vous avez trouvé le villageois !</ACText>
                     <TouchableOpacity onPress={startGame} style={styles.restartButton}>
-                        <ACText style={styles.restartButtonText}>Restart Game</ACText>
+                        <ACText style={styles.restartButtonText}>Recommencer la partie</ACText>
                     </TouchableOpacity>
                 </View>
             )}

@@ -79,6 +79,19 @@ export const getRandomVillager = async (): Promise<Villager | null> => {
     }
 }
 
+export const getRandomVillagers = async (n: number): Promise<Villager[] | null> => {
+    console.log("getRandomVillagers");
+    try {
+        const db = await getConnection();
+        const result = await db.getAllAsync(`SELECT * FROM villagers_fr ORDER BY RANDOM() LIMIT ${n}`);
+        const villagers: Villager[] = mapRowsToVillagers(result);
+        return villagers;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
 const areFieldsNotEmpty = (villager: Villager): boolean => {
     return Object.values(villager).every(value => value !== "");
 };
