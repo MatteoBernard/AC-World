@@ -107,3 +107,24 @@ export const getAllNames = async (): Promise<string[]> => {
         return [];
     }
 }
+
+export const formatDate = (date: Date) => {
+    return date.toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long'
+    });
+};
+
+export const getVillagersByAnniversary = async (date: string): Promise<Villager[]> => {
+    console.log("getVillagersByAnniversary");
+    try {
+        const db = await getConnection();
+        const query = 'SELECT * FROM villagers_fr WHERE anniversaire = ?';
+        const result = await db.getAllAsync(query, [date]);
+        const villagers: Villager[] = mapRowsToVillagers(result);
+        return villagers;
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+}

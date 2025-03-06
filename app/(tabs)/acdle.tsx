@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {FlatList, View, Text, StyleSheet, TouchableOpacity, Image, ScrollView} from "react-native";
+import {View, StyleSheet, TouchableOpacity, Image, ScrollView} from "react-native";
 import Autocomplete from "react-native-autocomplete-input";
 import ACText from "@/components/ACText";
 import ACView from "@/components/ACView";
@@ -14,6 +14,8 @@ const ACDle = () => {
     const [gameOver, setGameOver] = useState(false);
     const [allVillagers, setAllVillagers] = useState<Villager[]>([]);
     const [filteredNames, setFilteredNames] = useState<{ nom: string; villager: Villager }[]>([]);
+    const [showMessage, setShowMessage] = useState(false);
+    const [isLongPress, setIsLongPress] = useState(false);
 
     useEffect(() => {
         getVillagers().then(setAllVillagers);
@@ -26,6 +28,13 @@ const ACDle = () => {
         } while (villager != null && villager.personnalite.includes("("));
         console.log(villager?.nom);
         setTargetVillager(villager);
+        setGuesses([]);
+        setCurrentGuess("");
+        setGameOver(false);
+    };
+
+    const resetGame = () => {
+        setTargetVillager(null);
         setGuesses([]);
         setCurrentGuess("");
         setGameOver(false);
@@ -93,12 +102,28 @@ const ACDle = () => {
 
     return (
         <ACView style={styles.container}>
-            <View style={styles.imageContainer}>
-                <Image
-                    source={gameOver && targetVillager ? { uri: targetVillager.image } : require('@/assets/images/leaf2.png')}
-                    style={styles.image}
-                />
-            </View>
+            <TouchableOpacity
+                onPress={resetGame}
+                onLongPress={() => {
+                    setIsLongPress(true);
+                    setShowMessage(true);
+                    resetGame();
+                }}
+                onPressOut={() => {
+                    setIsLongPress(false);
+                    setShowMessage(false);
+                }}
+            >
+                <View style={styles.imageContainer}>
+                    <Image
+                        source={gameOver && targetVillager ? { uri: targetVillager.image } : require('@/assets/images/leaf2.png')}
+                        style={styles.image}
+                    />
+                </View>
+            </TouchableOpacity>
+            {showMessage && (
+                <ACText style={styles.longPressMessage}>Partie réinitialisée !</ACText>
+            )}
 
             {targetVillager && !gameOver && (
                 <View style={styles.autocompleteContainer}>
@@ -268,7 +293,8 @@ const styles = StyleSheet.create({
     },
     guessLabel: {
         fontSize: 22,
-        alignSelf: 'center'
+        alignSelf: 'center',
+        color: textColors.primary
     },
     start: {
         alignSelf: 'center',
@@ -277,7 +303,8 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         borderColor: uiColors.card.border,
-        borderWidth: 5
+        borderWidth: 5,
+        color: textColors.primary
     },
     gameOverContainer: {
         alignItems: 'center',
@@ -292,11 +319,17 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 10,
         borderColor: uiColors.card.border,
-        borderWidth: 5
+        borderWidth: 5,
+        color: textColors.primary
     },
     restartButtonText: {
         fontSize: 14,
-    }
+    },
+    longPressMessage: {
+        textAlign: 'center',
+        color: functionalColors.success,
+        marginTop: 10,
+    },
 });
 
 export default ACDle;

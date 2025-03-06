@@ -75,7 +75,7 @@ const MemoGame = () => {
                 <View style={styles.restartContainer}>
                     <ACText style={styles.restartLabel}>Bien joué ! Vous avez trouvé tous les villageois !</ACText>
                     <TouchableOpacity onPress={start} style={styles.restartButton}>
-                        <ACText>Relancer la partie</ACText>
+                        <ACText style={styles.restartButtonText}>Relancer la partie</ACText>
                     </TouchableOpacity>
                 </View>
             )}
@@ -111,14 +111,18 @@ const styles = StyleSheet.create({
     restartLabel: {
         fontSize: 16,
         margin: 10,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: textColors.primary
     },
     restartButton: {
         backgroundColor: textColors.light,
         padding: 10,
         borderRadius: 10,
         borderColor: uiColors.card.border,
-        borderWidth: 5
+        borderWidth: 5,
+    },
+    restartButtonText: {
+        color: textColors.primary
     }
 });
 

@@ -19,6 +19,9 @@ export const primaryColors = {
     goldDark: '#e6b337',
     goldLight: '#ffe68c',
 
+    wood: '#ae692b',
+    woodLight: '#c89f38',
+
     // Main background color
     background: '#f8f6e3',
 
