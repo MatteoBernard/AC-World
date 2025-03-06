@@ -53,3 +53,44 @@ export const getVillagersByEspeces = async (especes: string[]): Promise<Villager
         return [];
     }
 }
+
+export const getRandomVillager = async (): Promise<Villager | null> => {
+    console.log("getRandomVillager");
+    try {
+        const db = await getConnection();
+        let villager: Villager | null = null;
+        let attempts = 0;
+        const maxAttempts = 10;
+
+        while (attempts < maxAttempts) {
+            const result = await db.getAllAsync('SELECT * FROM villagers_fr ORDER BY RANDOM() LIMIT 1');
+            const villagers: Villager[] = mapRowsToVillagers(result);
+            if (villagers.length > 0 && areFieldsNotEmpty(villagers[0])) {
+                villager = villagers[0];
+                break;
+            }
+            attempts++;
+        }
+
+        return villager;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+const areFieldsNotEmpty = (villager: Villager): boolean => {
+    return Object.values(villager).every(value => value !== "");
+};
+
+export const getAllNames = async (): Promise<string[]> => {
+    console.log("getAllNames");
+    try {
+        const db = await getConnection();
+        const result = await db.getAllAsync('SELECT nom FROM villagers_fr');
+        return result.map((row: any) => row.nom);
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+}

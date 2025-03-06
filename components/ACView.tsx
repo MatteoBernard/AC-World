@@ -1,4 +1,4 @@
-import {StyleSheet, View} from "react-native";
+import {KeyboardAvoidingView, StyleSheet, View} from "react-native";
 import {primaryColors} from "@/constants/colors";
 
 interface ACViewProps {
@@ -8,9 +8,9 @@ interface ACViewProps {
 
 const ACView = (props: ACViewProps) => {
   return (
-      <View style={[styles.background, props.style]}>
+      <KeyboardAvoidingView style={[styles.background, props.style]}>
           {props.children}
-      </View>
+      </KeyboardAvoidingView>
   );
 }
 

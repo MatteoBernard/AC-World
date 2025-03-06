@@ -41,6 +41,7 @@ const TabLayout = () => {
                     borderColor: uiColors.navBar.border,
                 },
                 animation: "none",
+                tabBarHideOnKeyboard: true
             })}
         >
         <Tabs.Screen
